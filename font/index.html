@@ -1,0 +1,311 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+	<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+
+	<meta name="description" content="広島原爆の実相を世界につたえる多元的デジタルアーカイブズ / A Pluralistic digital archive that tells the reality of Hiroshima atomic bomb"/>
+	<meta property="og:image" content="https://lh3.googleusercontent.com/-ecc_xmYH3sU/VPs4SuYVBfI/AAAAAAAFS-8/0wvcmp6qZvc/s400/Screen%2520Shot%25202015-03-08%2520at%25202.40.48.png"/>
+	<meta property="og:description" content="広島原爆の実相を世界につたえる多元的デジタルアーカイブズ / A Pluralistic digital archive that tells the reality of Hiroshima atomic bomb"/>
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+	<title>Hiroshima Archive｜ヒロシマ・アーカイブ</title>
+	<link rel="SHORTCUT ICON" href="http://shinsai.mapping.jp/favicon.ico">
+	<style>
+		@import url(Cesium/Widgets/widgets.css);
+	</style>
+	<link rel="stylesheet" type="text/css" media="all" href="./css/style.css" />
+	<link rel="stylesheet" type="text/css" media="all" href="./css/menubutton.css" />
+	<script src="js/jquery-2.1.3.min.js"></script>
+	<script src="js/slidein.js"></script>
+	<script src="js/slidein2.js"></script>
+	<script src="Cesium/Cesium.js"></script>
+	<script src="js/JapanGSIImageryProvider.js"></script>
+	<script src="js/JapanGSITerrainProvider.js"></script>
+		<script>
+			(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+			(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+			m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+			})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+			ga('create', 'UA-55397811-2', 'auto');
+			ga('send', 'pageview');
+		</script>
+</head>
+<body>
+	<div id="blackOut"><img class="loading" src="data/loading.gif"></div>
+	<div id="cesiumContainer"></div>
+	<div id="button" class="general-button">
+		<div class="button-content">
+			<span class="icon-font">menu</span>
+		</div>
+	</div>
+	<div id="button2" class="general-button" onclick="move2d();">
+		<div class="button-content">
+			<span class="icon-font">map</span>
+		</div>
+	</div>
+	<div id="button3" class="general-button">
+		<div class="button-content">
+			<span class="icon-font">paramater</span>
+		</div>
+	</div>
+	<div id="slide_menu"></div>
+	<div id="slide_menu2"></div>
+	<div class="sharebutton">
+		<ul class="share-buttons">
+		<li><a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Fhiroshima.archiving.jp%2F&t=" target="_blank" onclick="window.open('https://www.facebook.com/sharer/sharer.php?u=http://hiroshima.archiving.jp/'); return false;"><img class="share" src="../images/flat_web_icon_set/color/Facebook.png"></a></li>
+		<li><a href="https://twitter.com/intent/tweet?source=http%3A%2F%2Fhiroshima.archiving.jp%2F&text=:%20http%3A%2F%2Fhiroshima.archiving.jp%2F&via=hwtnv" target="_blank" title="Tweet" onclick="window.open('https://twitter.com/intent/tweet?text=' + encodeURIComponent(document.title) + ' http://hiroshima.archiving.jp/'); return false;"><img class="share" src="../images/flat_web_icon_set/color/Twitter.png"></a></li>
+		<li><a href="https://plus.google.com/share?url=http%3A%2F%2Fhiroshima.archiving.jp%2F" target="_blank" title="Share on Google+" onclick="window.open('https://plus.google.com/share?url=http://hiroshima.archiving.jp/'); return false;"><img class="share" src="../images/flat_web_icon_set/color/Google+.png"></a></li>
+	</ul>
+	</div>
+	<script>
+		var blackOutDiv = document.getElementById("blackOut");
+		var hiroshimaMap = [];
+		var hiroshimaPhoto = [];
+		var openStreetMap = [];
+
+		function viewPoints(_label, _lat, _lng, _heading, _pitch, _range) {
+			this.label = _label;
+			this.lat = _lat;
+			this.lng = _lng;
+			this.heading = _heading;
+			this.pitch = _pitch;
+			this.range = _range;
+		}
+		
+		var viewPointsArray=[];
+			viewPointsArray[0]=new viewPoints("原爆ドーム",34.39548333333333,132.4535916666667,0,-45,200);
+			viewPointsArray[1]=new viewPoints("平和公園",34.3927249,132.4524912,0,-45,600);
+			viewPointsArray[2]=new viewPoints("爆心地",34.39478216914307,132.4547065677773,0,-45,150);
+			viewPointsArray[3]=new viewPoints("相生橋",34.3964696,132.4527501,0,-45,150);
+			viewPointsArray[4]=new viewPoints("広島女学院",34.398160,132.466252,0,-45,800);
+			viewPointsArray[5]=new viewPoints("紙屋町",34.3953145,132.4577804,0,-45,150);
+			viewPointsArray[6]=new viewPoints("元安橋",34.3940449,132.4538838,0,-45,100);
+			viewPointsArray[7]=new viewPoints("八丁堀",34.393372,132.46516599999995,0,-45,500);
+			viewPointsArray[8]=new viewPoints("下村時計店",34.3925,132.46145,0,-45,150);
+			viewPointsArray[9]=new viewPoints("広島城",34.402176,132.459561,0,-45,600);
+			viewPointsArray[10]=new viewPoints("10000m上空",34.394915,132.45470999999998,0,-85,10000);
+			viewPointsArray[11]=new viewPoints("全証言",35.223815,134.086880,0,-45,600000);
+			viewPointsArray[12]=new viewPoints("初期位置",34.394915,132.45470999999998,0,-15,3000);
+
+		function czmlData(_label, _url) {
+			this.label = _label;
+			this.url = _url;
+		}
+		
+		var czmlDataArray=[];
+			czmlDataArray[0]=new czmlData("平和を祈る人たちへ",'czml/heiwa_wo_inoru.czml');
+			czmlDataArray[1]=new czmlData("原爆被爆60年",'czml/hibaku60.czml');
+			czmlDataArray[2]=new czmlData("記憶を受け継ぐ",'czml/kiokuwo_uketsugu.czml');
+			czmlDataArray[3]=new czmlData("語り継ぐ",'czml/kataritsugu.czml');
+			czmlDataArray[4]=new czmlData("ビデオ証言",'czml/video_shogen.czml');
+			czmlDataArray[5]=new czmlData("平和公園碑巡り",'czml/himeguri.czml');
+			czmlDataArray[6]=new czmlData("広島平和記念資料館提供写真",'czml/photographs.czml');
+			czmlDataArray[7]=new czmlData("原子雲",'czml/genshiun.czml');
+
+		var overlayDataArray=[];
+
+		var mobile = 0;
+		var viewPointChangeMenu = document.getElementById('slide_menu');
+		var dropDownList = "";
+		
+		for (var i=0; i<viewPointsArray.length; i++) {
+			dropDownList = dropDownList + '<li><a href="#" onclick = "changeViewPoint(' + i + ',' + '5.0);return false;">' + viewPointsArray[i].label + '</a></li>';
+		}
+		
+		var viewPointChangeMenuHtml = '<ul class="viewpoint">' + dropDownList + '</ul>';
+		viewPointChangeMenu.innerHTML = viewPointChangeMenuHtml;
+		
+		var terrainProvider = new Cesium.JapanGSITerrainProvider({
+		});
+		
+		var getDevice = (function(){
+			var ua = navigator.userAgent;
+			if(ua.indexOf('iPhone') > 0 || ua.indexOf('iPod') > 0 || ua.indexOf('Android') > 0 && ua.indexOf('Mobile') > 0){
+				mobile = 1;
+			}else if(ua.indexOf('iPad') > 0 || ua.indexOf('Android') > 0){
+				mobile = 2;
+			}else{
+				mobile = 0;
+			}
+		})();
+		
+		var viewer = new Cesium.Viewer('cesiumContainer',{
+			navigationHelpButton : false,
+			navigationInstructionsInitiallyVisible : false,
+			geocoder:false,
+			timeline: false,
+			animation: false,
+			sceneModePicker:false,
+			baseLayerPicker:false,
+			scene3DOnly : true
+		});
+		viewer.camera.frustum.fov = 70 * (3.14 / 180);
+		viewer.camera.setView({
+			position : Cesium.Cartesian3.fromDegrees(132.45470999999998,34.394915,20000000),
+			roll : 0.0
+		});
+		if (mobile == 0) {		
+			viewer.terrainProvider = terrainProvider;
+			viewer.terrainProvider.heightmapTerrainQuality = 0.1;
+		} else {
+			viewer.scene.screenSpaceCameraController.enableTilt = false;			
+		}
+		blackOut(0);
+
+		var layers = viewer.scene.imageryLayers;
+		setTimeout('groundZero()',1000);
+
+		function groundZero(){
+			changeViewPoint(10,3);
+			hiroshima1945map();
+			circles();
+			setTimeout('landing()',4000);
+		}
+
+		function landing(){
+			changeViewPoint(12,3);
+			setTimeout('blackOut(1)',3000);
+			setTimeout('loadKml()',3000);
+		}
+
+		function loadKml(){			
+			var i = 0;
+			var load = setInterval(function(){
+				var promise = Cesium.CzmlDataSource.load(czmlDataArray[i].url);
+				promise.then(function(dataSource) {
+						viewer.dataSources.add(dataSource);
+					}).otherwise(function(error){
+						alert('KMLデータが読み込めません');
+				});
+				i++;
+				if (i == czmlDataArray.length){
+					clearInterval(load);
+					setTimeout('blackOut(0)',3000);
+				}
+			}, 200);
+		}
+
+		function hiroshima1945map (){
+			if (mobile == 0){
+				openStreetMap = layers.addImageryProvider(new Cesium.OpenStreetMapImageryProvider());
+				openStreetMap.alpha = 0;
+
+				hiroshimaPhoto = layers.addImageryProvider(new Cesium.JapanGSIImageryProvider({
+				    layerLists: [{
+				        "id": "ort_USA10",
+				        "zoom": "15-18",
+				        "ext": "png"
+				    },
+					"relief","std"],
+					credit : 'Geospatial Information Authority of Japan'
+				}));
+				hiroshimaPhoto.alpha = 0;
+				hiroshimaPhoto.saturation = 0;
+				hiroshimaPhoto.brightness = 0.70;
+				hiroshimaPhoto.contrast = 1.0;
+			
+				var tileUrl = 'http://hiroshima.archiving.jp/web3d/hiroshima_tile_TMS/';
+				hiroshimaMap = layers.addImageryProvider(new Cesium.TileMapServiceImageryProvider({
+					url : tileUrl,
+					minimumLevel : 11,
+					maximumLevel : 17
+				}));
+
+				function overlayData(_label, _value, _overlayObj, _id) {
+					this.label = _label;
+					this.value = _value;
+					this.overlayObj = _overlayObj;
+					this.id = _id;
+				}
+				overlayDataArray[0]=new overlayData("地図1945",100,hiroshimaMap,"range01");
+				overlayDataArray[1]=new overlayData("航空写真1945-50",0,hiroshimaPhoto,"range02");
+				overlayDataArray[2]=new overlayData("現在の地図",0,openStreetMap,"range03");
+			
+				var overlayList = "";
+				for (var i=0; i<overlayDataArray.length; i++) {
+					overlayList = overlayList + '<p class="slide_label">' + overlayDataArray[i].label + '</p><input id="' + overlayDataArray[i].id + '" type="range" min="0" max="33" value="' + overlayDataArray[i].value * 0.33 + '" step="1" oninput="transParent(' + i + ');"/>';
+				}
+				var overlayListMenu = document.getElementById('slide_menu2');
+				overlayListMenu.innerHTML = overlayList;
+			} else {
+				document.getElementById('button3').style.visibility = 'hidden';
+			}
+		}
+		
+		function transParent (layer){
+			var id = overlayDataArray[layer].id;
+			var overlay = overlayDataArray[layer].overlayObj;
+			var slider = document.getElementById(id);
+			if (slider.value == 0){
+				overlay.show = false;	
+			} else{
+				overlay.show = true;
+				overlay.alpha = slider.value * 0.03;
+			}
+		}
+
+		function circles() {
+			viewer.entities.add({
+				name: '炸裂後0.2秒後の火球',
+				description: '<div class="fireball"><p class="desc">原爆炸裂後0.2秒後の火球。直径310m、表面温度は6,000度。最も大きく、明るく見える状態。</p><p class="desc">出典：NHKスペシャル「原爆投下・10秒の衝撃」</p></div>',
+				position : Cesium.Cartesian3.fromDegrees(132.4547065677773,34.39478216914307,600),
+				ellipsoid : {
+					radii : new Cesium.Cartesian3(155.0, 155.0, 155.0),
+					outline : false,
+					material : Cesium.Color.RED.withAlpha(0.4)
+				}
+			});
+			for (i=1; i<6; i++) {
+				var r = i*500;
+				viewer.entities.add({
+					name : r + 'm',
+					position : Cesium.Cartesian3.fromDegrees(132.4547065677773,34.39478216914307),
+					ellipse : {
+						semiMinorAxis : r,
+						semiMajorAxis : r,
+						fill : false,
+						outline : true,
+						outlineColor : Cesium.Color.WHITE.withAlpha(0.5)
+					}
+				});
+			}
+		}
+		
+		function changeViewPoint(num, delay) {
+			var newLat = viewPointsArray[num].lat;
+			var newLng = viewPointsArray[num].lng;
+			var newHeading = Cesium.Math.toRadians(viewPointsArray[num].heading);
+			var newPitch = Cesium.Math.toRadians(viewPointsArray[num].pitch);
+			var newRange = viewPointsArray[num].range;
+
+			var center = Cesium.Cartesian3.fromDegrees(newLng, newLat);
+			var boundingSphere = new Cesium.BoundingSphere(center, newRange);
+			var headingPitchRange = new Cesium.HeadingPitchRange(newHeading, newPitch, newRange);
+
+		    viewer.camera.constrainedAxis = Cesium.Cartesian3.UNIT_Z;
+			viewer.camera.flyToBoundingSphere(boundingSphere,{
+				duration : delay,
+				offset : headingPitchRange
+			});
+		}
+		
+		function move2d(){
+			window.location.href = '../sp/';
+		}
+		
+		function blackOut(param) {
+			if (param == 0){
+				$(function() {
+					$(blackOutDiv).fadeOut("slow");
+				});
+			} else {
+				$(function() {
+					$(blackOutDiv).fadeIn("slow");
+				});
+			} 
+		}
+		
+	</script>
+</body>
+</html>
