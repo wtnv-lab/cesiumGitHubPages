@@ -4,7 +4,7 @@ Cesiumを使った日野市オープンデータを元にしたKMLファイル�
  
 ### 使い方
 
-視点移動、ジオコーディング、ImageryLayerの切り替え、現在地へ移動の各機能がすでに実装されています。これらの機能は「ヒロシマ・アーカイブ」のものに倣っています。
+視点移動、ジオコーディング、ImageryLayerの切り替え、現在地へ移動、ヘルプ起動の各機能がすでに実装されています。これらの機能は「ヒロシマ・アーカイブ」のものに倣っています。
 
 
 サンプルのKMLファイルと自分の作成したKMLファイルを入れ替えて、下記のカスタマイズを行うだけで表示できます。
@@ -13,17 +13,20 @@ Cesiumを使った日野市オープンデータを元にしたKMLファイル�
 
 +   `index.html 106行目` :
     視点配列を作成します。label, lat, lng, heading, pitch, rangeを指定可能です。画面左上のプルダウンメニューに表示されます。260行目のchangeViewPoint関数で処理されます。
- 
 +   `index.html 130行目` :
     KML配列を作成します。labelとurlを指定可能です。data/kmlに格納したkmlファイルについて指定してください。
-
 +   `Cesium/Widgets/InfoBox/InfoBoxDescription.css` :
     KMLの<description>タグ内のスタイルはこのCSSで指定してください。
-
 +   `その他` :
     自由に編集してください。
 
+### 日野市オープンデータのKMLファイルについて
 
+日野市オープンデータをGoogleFusionTablesを使ってKML化したものに、以下の編集を施しています。
+
++   `MultiGeometryタグの削除` :
+    GFTからKMLを書き出すと自動的にMultiGeometryタグが追加され、PointとLinearRingが格納されています。Cesiumでそのまま表示すると、画面上にLinearRingのポリゴンが描画され、視覚的に煩雑なので、タグのみ削除しています。LinearRingタグは実害がないのでそのままにしてあります。ファイル容量を減らしたい場合はPointタグのみ残すのが良いと思います。
++   
 
 ### 参考リンク
 
