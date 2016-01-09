@@ -7,12 +7,19 @@ Cesiumを使った日野市オープンデータを元にしたKMLファイル�
  
 ### 使い方
 
-視点移動、ジオコーディング、ImageryLayerの切り替え、現在地へ移動、ヘルプ起動の各機能がすでに実装されています。これらの機能は「ヒロシマ・アーカイブ」のものに倣っています。
+視点移動、ジオコーディング、ImageryLayerの切り替え、現在地へ移動、ストリートビュー起動、ヘルプ起動の各機能がすでに実装されています。これらの機能は「ヒロシマ・アーカイブ」のものに倣っています。
 
++ 視点移動：左上のメニューボタン
++ ジオコーディング：左上のフォーム
++ ImageryLayer切り替え：右上のパラメータボタン
++ 現在地へ移動：下中央のボタン
++ ストリートビュー起動：ビルボード（アイコン）をダブルクリック
++ ヘルプ起動：右上の「？」ボタン
 
-サンプルのKMLファイルと自分の作成したKMLファイルを入れ替えて、下記のカスタマイズを行うだけで表示できます。
  
 ### カスタマイズ
+
+サンプルのKMLファイルと自分の作成したKMLファイルを入れ替えて、下記のカスタマイズを行うだけで表示できます。
 
 +   `index.html 106行目` :
     視点配列を作成します。label, lat, lng, heading, pitch, rangeを指定可能です。画面左上のプルダウンメニューに表示されます。260行目のchangeViewPoint関数で処理されます。
@@ -32,11 +39,11 @@ Cesiumを使った日野市オープンデータを元にしたKMLファイル�
 
 ### 参考リンク
 
-0. [GitHub Pagesでの閲覧](http://wtnv-lab.github.io/cesiumGitHubPages/ "日野市オープンデータ可視化")
-1. [Cesium](http://cesiumjs.org/ "Cesium")
-2. [KML Reference](https://developers.google.com/kml/documentation/kmlreference "KML Reference")
-3. [オープンデータページ　日野](http://www.city.hino.lg.jp/index.cfm/196,129180,353,2132,html "オープンデータページ　日野")
-4. [ヒロシマ・アーカイブ](http://hiroshima.mapping.jp/ "ヒロシマ・アーカイブ")
+1. [GitHub Pagesでの閲覧](http://wtnv-lab.github.io/cesiumGitHubPages/ "日野市オープンデータ可視化")
+2. [Cesium](http://cesiumjs.org/ "Cesium")
+3. [KML Reference](https://developers.google.com/kml/documentation/kmlreference "KML Reference")
+4. [オープンデータページ　日野](http://www.city.hino.lg.jp/index.cfm/196,129180,353,2132,html "オープンデータページ　日野")
+5. [ヒロシマ・アーカイブ](http://hiroshima.mapping.jp/ "ヒロシマ・アーカイブ")
  
 ### ライセンス
 
