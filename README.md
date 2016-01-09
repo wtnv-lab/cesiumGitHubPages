@@ -3,7 +3,7 @@ Cesiumを使ったKML可視化のサンプル
 Cesiumを使った日野市オープンデータを元にしたKMLファイル可視化のサンプルです。なお、日野市オープンデータに限らず、任意のKMLファイルをデジタルアース上に表示可能です。
 
 
-首都大学東京システムデザイン学部インダストリアルコース3年生の授業向けに作成しました。プログラミング初心者でも、オープンデータを使ったデジタルアースコンテンツを作れます。
+首都大学東京システムデザイン学部インダストリアルコース3年生の授業向けに作成しました。プログラミング初心者でも、オープンデータを使ったデジタルアースコンテンツを作れます。受講者以外のかたもぜひご活用ください。
  
 ### 使い方
 
@@ -32,6 +32,7 @@ Cesiumを使った日野市オープンデータを元にしたKMLファイル�
 
 ### 参考リンク
 
+0. [GitHub Pagesでの閲覧](http://wtnv-lab.github.io/cesiumGitHubPages/ "日野市オープンデータ可視化")
 1. [Cesium](http://cesiumjs.org/ "Cesium")
 2. [KML Reference](https://developers.google.com/kml/documentation/kmlreference "KML Reference")
 3. [オープンデータページ　日野](http://www.city.hino.lg.jp/index.cfm/196,129180,353,2132,html "オープンデータページ　日野")
