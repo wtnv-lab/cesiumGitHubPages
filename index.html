@@ -131,7 +131,7 @@ var kmlDataArray=[];
 kmlDataArray[0]=new kmlData("避難所",'data/kml/hinanjo.kml');
 kmlDataArray[1]=new kmlData("避難場所",'data/kml/hinanbasyo.kml');
 
-//オーバレイ配列作成
+//オーバレイ配列を用意
 
 var overlayDataArray=[];
 var openStreetMap = [];
@@ -153,7 +153,7 @@ var viewer = new Cesium.Viewer('cesiumContainer',{
 	scene3DOnly : true
 });
 
-//地形メッシュ設定
+//地形メッシュを設定
 
 var cesiumTerrainProviderMeshes = new Cesium.CesiumTerrainProvider({
 	url : '//assets.agi.com/stk-terrain/world',
@@ -162,7 +162,7 @@ var cesiumTerrainProviderMeshes = new Cesium.CesiumTerrainProvider({
 });
 viewer.terrainProvider = cesiumTerrainProviderMeshes;
 
-//地形強調
+//地形を強調する際は値を変更
 
 viewer.terrainExaggeration = 1.0;
 
@@ -195,7 +195,7 @@ function landing(){
 	setTimeout('loadKml()',3000);
 }
 
-//KMLロード
+//KMLロード関数
 
 function loadKml(){			
 	var i = 0;
@@ -215,13 +215,21 @@ function loadKml(){
 	}, 200);
 }
 
-//地図オーバレイ
+//地図オーバレイ関数
 
 function openStreetMapLayer (){
 
 	openStreetMap = layers.addImageryProvider(new Cesium.createOpenStreetMapImageryProvider());
+
+	//OSMの明度を下げる
+
 	openStreetMap.brightness = 0.7;
+
+	//OSMの不透明度をデフォルト0に
+
 	openStreetMap.alpha = 0;
+
+	//オーバーレイ配列作成関数
 
 	function overlayData(_label, _value, _overlayObj, _id) {
 		this.label = _label;
@@ -239,7 +247,7 @@ function openStreetMapLayer (){
 	overlayListMenu.innerHTML = overlayList;
 }
 
-//地図透明度変更
+//OSM透明度を変更する関数
 
 function transParent (layer){
 	var id = overlayDataArray[layer].id;
@@ -253,7 +261,7 @@ function transParent (layer){
 	}
 }
 
-//視点移動
+//視点移動する関数
 
 function changeViewPoint(num, delay) {
 	var newLat = viewPointsArray[num].lat;
@@ -274,7 +282,7 @@ function changeViewPoint(num, delay) {
 	});
 }
 
-//ジオコード
+//ジオコード関数
 
 function geocode() {
 	var geocoder = new google.maps.Geocoder();
@@ -304,7 +312,7 @@ function geocode() {
 		);
 }
 
-//ダブルクリックでストビューを更新
+//ダブルクリックでストビューを表示する関数
 
 function setClickEvent(){
 	var handler = new Cesium.ScreenSpaceEventHandler(viewer.scene.canvas);
@@ -351,7 +359,7 @@ function setClickEvent(){
 }, Cesium.ScreenSpaceEventType.LEFT_DOUBLE_CLICK);
 }
 
-//現在地へ移動
+//現在地へ移動する関数
 
 function flyToMyLocation() {
 	function fly(position) {
@@ -369,7 +377,7 @@ function help(){
 	window.open('http://labo.wtnv.jp/');
 }
 
-//DIVのフェードイン・アウト	
+//DIVのフェードイン・アウト	関数
 
 function fadeInOut(layer,param) {
 	if (param == 0){
