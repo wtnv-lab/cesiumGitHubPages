@@ -150,7 +150,8 @@ var viewer = new Cesium.Viewer('cesiumContainer',{
 	animation: false,
 	sceneModePicker:false,
 	baseLayerPicker:false,
-	scene3DOnly : true
+	scene3DOnly : true,
+	terrainExaggeration : 3.0
 });
 
 //地形メッシュを設定
@@ -164,7 +165,11 @@ viewer.terrainProvider = cesiumTerrainProviderMeshes;
 
 //地形を強調する際は値を変更
 
+<<<<<<< HEAD
 viewer.terrainExaggeration = 3.0;
+=======
+//viewer.terrainExaggeration = 3.0;
+>>>>>>> gh-pages
 
 //フォグ
 
