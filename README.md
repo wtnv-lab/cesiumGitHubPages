@@ -39,7 +39,7 @@ Cesiumを使った日野市オープンデータを元にしたKMLファイル�
 
 ### 参考リンク
 
-1. [GitHub Pagesでの閲覧](http://wtnv-lab.github.io/cesiumGitHubPages/ "日野市オープンデータ可視化")
+1. [GitHub Pagesでの閲覧](https://wtnv-lab.github.io/cesiumGitHubPages/ "日野市オープンデータ可視化")
 2. [Cesium](http://cesiumjs.org/ "Cesium")
 3. [KML Reference](https://developers.google.com/kml/documentation/kmlreference "KML Reference")
 4. [Fusion Tablesを使ってみる](http://pc.nikkeibp.co.jp/article/column/20110829/1036486/ "Fusion Tablesを使ってみる-PC Online")
