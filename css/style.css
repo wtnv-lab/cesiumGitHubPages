@@ -292,3 +292,15 @@ input {
 	text-align:center;
 	margin-top: -1em;
 }
+
+/* OSMクレジット */
+
+#osmCredit {
+    position:absolute;
+    bottom:2px;
+    left:2px;
+    font-size:8px;
+    z-index:20000;
+    margin:0;
+    padding:0;
+}

@@ -1,18 +1,18 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
+
 <head>
 	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 	<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
 	<meta name="description" content="Cesiumを使った日野市オープンデータ可視化のサンプルです" />
-	<meta property="og:image" content="data/hinoshi.png"
-	/>
+	<meta property="og:image" content="data/hinoshi.png" />
 	<meta property="og:description" content="Cesiumを使った日野市オープンデータ可視化のサンプルです" />
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
 	<title>日野市オープンデータ可視化</title>
 	<link rel="alternate" href="http://hiroshima.archiving.jp/index_en.html" hreflang="en" />
 	<link rel="SHORTCUT ICON" href="http://shinsai.mapping.jp/favicon.ico">
 	<style>
-	@import url(Cesium/Widgets/widgets.css);
+		@import url(Cesium/Widgets/widgets.css);
 	</style>
 	<link rel="stylesheet" type="text/css" media="all" href="./css/style.css" />
 	<link rel="stylesheet" type="text/css" media="all" href="./css/menubutton.css" />
@@ -23,49 +23,53 @@
 	<script src="http://www.google.com/jsapi"></script>
 	<script type="text/javascript" src="http://maps.google.com/maps/api/js"></script>
 </head>
+
 <body>
 	<div class="geocode">
 		<form action="javascript:geocode()" class="textbox" />
-		<input id="inputtext" class="textbox" type="text" value="" placeholder="地名で検索"/>
-	</form>
-</div>
-<div id="svNotAvailable" onclick="fadeInOut(svNotAvailable,0)"></div>
-<div id="blackOut">
-	<img class="loading" src="data/loading.gif">
-</div>
-<div id="cesiumContainer"></div>
-<div id="button" class="general-button">
-	<div class="button-content">
-		<span class="icon-font">menu</span>
+		<input id="inputtext" class="textbox" type="text" value="" placeholder="地名で検索" />
+		</form>
 	</div>
-</div>
-<div id="button2" class="general-button" onclick="help();">
-	<div class="button-content">
-		<span class="icon-font">help</span>
+	<div id="svNotAvailable" onclick="fadeInOut(svNotAvailable,0)"></div>
+	<div id="blackOut">
+		<img class="loading" src="data/loading.gif">
 	</div>
-</div>
-<div id="button3" class="general-button">
-	<div class="button-content">
-		<span class="icon-font">paramater</span>
+	<div id="cesiumContainer"></div>
+	<div id="button" class="general-button">
+		<div class="button-content">
+			<span class="icon-font">menu</span>
+		</div>
 	</div>
-</div>
-<div id="button4" class="general-button" onclick="streetView();">
-	<div class="button-content">
-		<span class="icon-font">car</span>
+	<div id="button2" class="general-button" onclick="help();">
+		<div class="button-content">
+			<span class="icon-font">help</span>
+		</div>
 	</div>
-</div>
-<div id="buttonGeo" class="general-button" onclick="flyToMyLocation();">
-	<div class="button-content">
-		<span class="icon-font">geo</span>
+	<div id="button3" class="general-button">
+		<div class="button-content">
+			<span class="icon-font">paramater</span>
+		</div>
 	</div>
-</div>
-<div id="slide_menu"></div>
-<div id="slide_menu2"></div>
-<div id="streetView_wrapper">
-	<div id="streetView"></div>
-	<button class="btn" onclick="fadeInOut(streetView_wrapper,0)">×</button>
-</div>
-<script>
+	<div id="button4" class="general-button" onclick="streetView();">
+		<div class="button-content">
+			<span class="icon-font">car</span>
+		</div>
+	</div>
+	<div id="buttonGeo" class="general-button" onclick="flyToMyLocation();">
+		<div class="button-content">
+			<span class="icon-font">geo</span>
+		</div>
+	</div>
+	<div id="slide_menu"></div>
+	<div id="slide_menu2"></div>
+	<div id="streetView_wrapper">
+		<div id="streetView"></div>
+		<button class="btn" onclick="fadeInOut(streetView_wrapper,0)">×</button>
+	</div>
+	<div id="osmCredit">
+		<a href="https://www.openstreetmap.org/copyright" target="_blank">MapData: © OpenStreetMap contributors</a>
+	</div>
+	<script>
 
 //スワイプによるスクロール禁止
 
@@ -151,7 +155,7 @@ var viewer = new Cesium.Viewer('cesiumContainer',{
 	sceneModePicker:false,
 	baseLayerPicker:false,
 	scene3DOnly : true,
-	terrainExaggeration : 3.0
+	terrainExaggeration : 1.0
 });
 
 //地形メッシュを設定
@@ -375,7 +379,7 @@ function flyToMyLocation() {
 //ヘルプ
 
 function help(){
-	window.open('http://labo.wtnv.jp/');
+	window.open('https://github.com/wtnv-lab/cesiumGitHubPages');
 }
 
 //DIVのフェードイン・アウト	関数
