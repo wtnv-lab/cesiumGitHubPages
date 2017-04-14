@@ -199,9 +199,23 @@
 		function loadKml() {
 			var i = 0;
 			var load = setInterval(function () {
-				var promise = Cesium.KmlDataSource.load(kmlDataArray[i].url);
+				var kmlDataSource = new Cesium.KmlDataSource();
+				var promise = kmlDataSource.load(kmlDataArray[i].url);
 				promise.then(function (dataSource) {
 					viewer.dataSources.add(dataSource);
+
+					//ビルボードの高さを地形に合わせる
+
+					billboardsIdsLength = (kmlDataSource.entities.values).length;
+					var i = 0;
+					while (i <= billboardsIdsLength){
+						var entity = kmlDataSource.entities.values[i];
+						if (entity) {
+							kmlDataSource.entities.values[i].billboard.heightReference = Cesium.HeightReference.CLAMP_TO_GROUND;
+						}
+						i++;
+					}
+
 				}).otherwise(function (error) {
 					alert('KMLデータが読み込めません');
 				});
