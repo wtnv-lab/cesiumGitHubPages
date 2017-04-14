@@ -160,6 +160,7 @@ viewer.screenSpaceEventHandler.removeInputAction(Cesium.ScreenSpaceEventType.LEF
 
 var cesiumTerrainProviderMeshes = new Cesium.CesiumTerrainProvider({
 	url : '//assets.agi.com/stk-terrain/world',
+	//海を表示しないときは以下をfalseに
 	requestWaterMask : true,
 	requestVertexNormals : true
 });
@@ -244,7 +245,7 @@ function openStreetMapLayer (){
 
 	var overlayList = "";
 	for (var i=0; i<overlayDataArray.length; i++) {
-		overlayList = overlayList + '<p class="slide_label">' + overlayDataArray[i].label + '</p><input id="' + overlayDataArray[i].id + '" type="range" min="0" max="33" value="' + overlayDataArray[i].value * 0.33 + '" step="1" oninput="transParent(' + i + ');"/>';
+		overlayList = overlayList + '<p class="slideLabel">' + overlayDataArray[i].label + '</p><input id="' + overlayDataArray[i].id + '" type="range" min="0" max="33" value="' + overlayDataArray[i].value * 0.33 + '" step="1" oninput="transParent(' + i + ');"/>';
 	}
 	var overlayListMenu = document.getElementById('slideMenuLayer');
 	overlayListMenu.innerHTML = overlayList;
