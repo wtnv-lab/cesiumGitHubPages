@@ -16,7 +16,7 @@ var menu = $('#slideMenuViewPoint'),
 
 $(function(){
 var menu = $('#slideMenuLayer'),
-	menuBtn = $('#button3'),
+	menuBtn = $('#buttonLayer'),
 	body = $(document.body),	
 	menuWidth = menu.outerWidth();	            
 		

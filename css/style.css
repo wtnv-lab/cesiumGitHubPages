@@ -86,13 +86,13 @@ button.cesium-infoBox-close {
 	left:8px;
 	z-index:10005;
 }
-#button2 {
+#buttonHelp {
 	position:absolute;
 	top:8px;
 	right:8px;
 	z-index:10005;
 }
-#button3 {
+#buttonLayer {
 	position:absolute;
 	top:8px;
 	right:54px;

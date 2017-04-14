@@ -39,12 +39,12 @@
 			<span class="icon-font">menu</span>
 		</div>
 	</div>
-	<div id="button2" class="general-button" onclick="help();">
+	<div id="buttonHelp" class="general-button" onclick="help();">
 		<div class="button-content">
 			<span class="icon-font">help</span>
 		</div>
 	</div>
-	<div id="button3" class="general-button">
+	<div id="buttonLayer" class="general-button">
 		<div class="button-content">
 			<span class="icon-font">paramater</span>
 		</div>
@@ -209,7 +209,7 @@ function loadKml(){
 		if (i == kmlDataArray.length){
 			clearInterval(load);
 			setClickEvent();
-			setTimeout('fadeInOut(blackOutDiv,0)',3000);
+			setTimeout('fadeInOut(blackOutDiv,0)',1000);
 		}
 	}, 200);
 }
