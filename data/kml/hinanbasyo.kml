@@ -16,7 +16,7 @@
 		<IconStyle>
 			<color>ff0000ff</color>
 			<Icon>
-				<href>http://maps.google.com/mapfiles/kml/shapes/placemark_circle.png</href>
+				<href>https://maps.google.com/mapfiles/kml/shapes/placemark_circle.png</href>
 			</Icon>
 		</IconStyle>
 		<LabelStyle>
@@ -30,7 +30,7 @@
 		<IconStyle>
 			<color>ff0000ff</color>
 			<Icon>
-				<href>http://maps.google.com/mapfiles/kml/shapes/placemark_circle.png</href>
+				<href>https://maps.google.com/mapfiles/kml/shapes/placemark_circle.png</href>
 			</Icon>
 		</IconStyle>
 		<BalloonStyle>
