@@ -50,7 +50,7 @@
 			<span class="icon-font">paramater</span>
 		</div>
 	</div>
-	<div id="button4" class="general-button" onclick="streetView();">
+	<div id="buttonStreetView" class="general-button" onclick="streetView();">
 		<div class="button-content">
 			<span class="icon-font">car</span>
 		</div>
@@ -93,7 +93,7 @@ var svNotAvailable = document.getElementById("svNotAvailable");
 
 $(function() {
 	$(svNotAvailable).hide();
-	$('#button4').hide();
+	$('#buttonStreetView').hide();
 });
 
 //視点作成配列
@@ -157,6 +157,10 @@ var viewer = new Cesium.Viewer('cesiumContainer',{
 	scene3DOnly : true,
 	terrainExaggeration : 1.0
 });
+
+//ダブルクリック操作付加
+
+viewer.screenSpaceEventHandler.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_DOUBLE_CLICK);
 
 //地形メッシュを設定
 
@@ -328,9 +332,8 @@ function setClickEvent(){
 			console.log (position);
 			var cart = Cesium.Ellipsoid.WGS84.cartesianToCartographic(position);
 			var latlng = new google.maps.LatLng(Cesium.Math.toDegrees(cart.latitude), Cesium.Math.toDegrees(cart.longitude));
-
 			var sv = new google.maps.StreetViewService();
-			sv.getPanoramaByLocation(latlng, 50, 
+			sv.getPanoramaByLocation(latlng, 100, 
 				function (data, status) {
 					//ストリートビュー未対応エリアの場合
 					if (status != google.maps.StreetViewStatus.OK) {
@@ -346,9 +349,10 @@ function setClickEvent(){
 								position : latlng
 							});
 					}
+					//選択したPlacemarkの場所にズームする
 					var newHeading = Cesium.Math.toRadians(0);
-					var newPitch = Cesium.Math.toRadians(-85);
-					var newRange = 500;
+					var newPitch = Cesium.Math.toRadians(-45);
+					var newRange = 1000;
 
 					var center = position;
 					var boundingSphere = new Cesium.BoundingSphere(center, 1000);
