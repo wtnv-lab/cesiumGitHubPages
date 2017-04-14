@@ -84,7 +84,7 @@
 
 		//ストリートビューのエラーメッセージDIVを隠す
 
-		$(function () {
+		$(function() {
 			$(svNotAvailable).hide();
 		});
 
@@ -132,7 +132,7 @@
 		var overlayDataArray = [];
 		var openStreetMap = [];
 
-		//ビューアを初期化	
+		//ビューアを初期化
 
 		var viewer = new Cesium.Viewer('cesiumContainer', {
 			imageryProvider: new Cesium.ArcGisMapServerImageryProvider({
@@ -175,7 +175,7 @@
 
 		//クレジットを隠す
 
-		$(function () {
+		$(function() {
 			$('.cesium-widget-credits').css('display', 'none');
 		});
 
@@ -198,17 +198,17 @@
 
 		function loadKml() {
 			var i = 0;
-			var load = setInterval(function () {
+			var load = setInterval(function() {
 				var kmlDataSource = new Cesium.KmlDataSource();
 				var promise = kmlDataSource.load(kmlDataArray[i].url);
-				promise.then(function (dataSource) {
+				promise.then(function(dataSource) {
 					viewer.dataSources.add(dataSource);
 
 					//ビルボードの高さを地形に合わせる
 
 					billboardsIdsLength = (kmlDataSource.entities.values).length;
 					var i = 0;
-					while (i <= billboardsIdsLength){
+					while (i <= billboardsIdsLength) {
 						var entity = kmlDataSource.entities.values[i];
 						if (entity) {
 							kmlDataSource.entities.values[i].billboard.heightReference = Cesium.HeightReference.CLAMP_TO_GROUND;
@@ -216,7 +216,7 @@
 						i++;
 					}
 
-				}).otherwise(function (error) {
+				}).otherwise(function(error) {
 					alert('KMLデータが読み込めません');
 				});
 				i++;
@@ -258,7 +258,8 @@
 
 			var overlayList = "";
 			for (var i = 0; i < overlayDataArray.length; i++) {
-				overlayList = overlayList + '<p class="slideLabel">' + overlayDataArray[i].label + '</p><input id="' + overlayDataArray[i].id + '" type="range" min="0" max="33" value="' + overlayDataArray[i].value * 0.33 + '" step="1" oninput="transParent(' + i + ');"/>';
+				overlayList = overlayList + '<p class="slideLabel">' + overlayDataArray[i].label + '</p><input id="' + overlayDataArray[i].id + '" type="range" min="0" max="33" value="' + overlayDataArray[i].value * 0.33 + '" step="1" oninput="transParent(' + i +
+					');"/>';
 			}
 			var overlayListMenu = document.getElementById('slideMenuLayer');
 			overlayListMenu.innerHTML = overlayList;
@@ -283,10 +284,11 @@
 		function geocode() {
 			var geocoder = new google.maps.Geocoder();
 			var input = document.getElementById('inputtext').value;
-			geocoder.geocode(
-				{ address: input },
+			geocoder.geocode({
+					address: input
+				},
 
-				function (results, status) {
+				function(results, status) {
 					if (status == google.maps.GeocoderStatus.OK) {
 						var viewportObj = results[0].geometry.viewport;
 						var southNorth = viewportObj[Object.keys(viewportObj)[0]];
@@ -316,7 +318,7 @@
 
 		function setClickEvent() {
 			var handler = new Cesium.ScreenSpaceEventHandler(viewer.scene.canvas);
-			handler.setInputAction(function (click) {
+			handler.setInputAction(function(click) {
 				var pickedObject = viewer.scene.pick(click.position);
 				if (Cesium.defined(pickedObject) && (pickedObject != "")) {
 					var position = pickedObject.primitive._position;
@@ -329,7 +331,7 @@
 					var cart = Cesium.Ellipsoid.WGS84.cartesianToCartographic(position);
 					var latlng = new google.maps.LatLng(Cesium.Math.toDegrees(cart.latitude), Cesium.Math.toDegrees(cart.longitude));
 					var sv = new google.maps.StreetViewService();
-					sv.getPanoramaByLocation(latlng, 100, function (data, status) {
+					sv.getPanoramaByLocation(latlng, 100, function(data, status) {
 
 						//ストリートビュー未対応エリアの場合エラーメッセージを表示
 
@@ -337,8 +339,7 @@
 							svNotAvailable.innerHTML = '<p class="errorMessage">この場所のストリートビューは利用できません</p>';
 							fadeInOut(svNotAvailable, 1);
 							setTimeout('fadeInOut(svNotAvailable,0)', 1500);
-						}
-						else {
+						} else {
 							streetViewWrapper.style.display = "block";
 							fadeInOut(streetViewWrapper, 1);
 							var svp = new google.maps.StreetViewPanorama(
@@ -409,7 +410,7 @@
 
 		function fadeInOut(layer, param) {
 			if (param == 0) {
-				$(function () {
+				$(function() {
 					$(layer).fadeOut("slow");
 				});
 
@@ -430,12 +431,11 @@
 
 				viewer.trackedEntity = undefined;
 			} else {
-				$(function () {
+				$(function() {
 					$(layer).fadeIn("slow");
 				});
 			}
 		}
-
 	</script>
 
 </body>
