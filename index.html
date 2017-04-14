@@ -18,7 +18,6 @@
 	<link rel="stylesheet" type="text/css" media="all" href="./css/menubutton.css" />
 	<script src="js/jquery-2.1.3.min.js"></script>
 	<script src="js/slidein.js"></script>
-	<script src="js/slidein2.js"></script>
 	<script src="Cesium/Cesium.js"></script>
 	<script src="https://www.google.com/jsapi"></script>
 	<script type="text/javascript" src="http://maps.google.com/maps/api/js?key=AIzaSyCc9E-ulJKRVMPyJe_V5sUVNU8kxiDIUtg"></script>
@@ -35,7 +34,7 @@
 		<img class="loading" src="data/loading.gif">
 	</div>
 	<div id="cesiumContainer"></div>
-	<div id="button" class="general-button">
+	<div id="buttonViewPoint" class="general-button">
 		<div class="button-content">
 			<span class="icon-font">menu</span>
 		</div>
@@ -50,18 +49,13 @@
 			<span class="icon-font">paramater</span>
 		</div>
 	</div>
-	<div id="button4" class="general-button" onclick="streetView();">
-		<div class="button-content">
-			<span class="icon-font">car</span>
-		</div>
-	</div>
 	<div id="buttonGeo" class="general-button" onclick="flyToMyLocation();">
 		<div class="button-content">
 			<span class="icon-font">geo</span>
 		</div>
 	</div>
-	<div id="slide_menu"></div>
-	<div id="slide_menu2"></div>
+	<div id="slideMenuViewPoint"></div>
+	<div id="slideMenuLayer"></div>
 	<div id="streetView_wrapper">
 		<div id="streetView"></div>
 		<button class="btn" onclick="fadeInOut(streetView_wrapper,0)">×</button>
@@ -93,7 +87,6 @@ var svNotAvailable = document.getElementById("svNotAvailable");
 
 $(function() {
 	$(svNotAvailable).hide();
-	$('#button4').hide();
 });
 
 //視点作成配列
@@ -114,7 +107,7 @@ viewPointsArray[2]=new viewPoints("初期視点",35.654,139.394,0,-35,5000);
 
 //視点メニュー作成
 
-var viewPointChangeMenu = document.getElementById('slide_menu');
+var viewPointChangeMenu = document.getElementById('slideMenuViewPoint');
 var dropDownList = "";
 
 for (var i=0; i<viewPointsArray.length; i++) {
@@ -157,6 +150,10 @@ var viewer = new Cesium.Viewer('cesiumContainer',{
 	scene3DOnly : true,
 	terrainExaggeration : 1.0
 });
+
+//ダブルクリック操作付加
+
+viewer.screenSpaceEventHandler.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_DOUBLE_CLICK);
 
 //地形メッシュを設定
 
@@ -252,7 +249,7 @@ function openStreetMapLayer (){
 	for (var i=0; i<overlayDataArray.length; i++) {
 		overlayList = overlayList + '<p class="slide_label">' + overlayDataArray[i].label + '</p><input id="' + overlayDataArray[i].id + '" type="range" min="0" max="33" value="' + overlayDataArray[i].value * 0.33 + '" step="1" oninput="transParent(' + i + ');"/>';
 	}
-	var overlayListMenu = document.getElementById('slide_menu2');
+	var overlayListMenu = document.getElementById('slideMenuLayer');
 	overlayListMenu.innerHTML = overlayList;
 }
 
@@ -304,7 +301,6 @@ function geocode() {
 				var viewportObj = results[0].geometry.viewport;
 				var southNorth = viewportObj[Object.keys(viewportObj)[0]];
 				var westEast = viewportObj[Object.keys(viewportObj)[1]];
-
 				var south = southNorth[Object.keys(southNorth)[0]];
 				var north = southNorth[Object.keys(southNorth)[1]];
 				var west = westEast[Object.keys(westEast)[0]];
@@ -332,9 +328,8 @@ function setClickEvent(){
 			console.log (position);
 			var cart = Cesium.Ellipsoid.WGS84.cartesianToCartographic(position);
 			var latlng = new google.maps.LatLng(Cesium.Math.toDegrees(cart.latitude), Cesium.Math.toDegrees(cart.longitude));
-
 			var sv = new google.maps.StreetViewService();
-			sv.getPanoramaByLocation(latlng, 50, 
+			sv.getPanoramaByLocation(latlng, 100, 
 				function (data, status) {
 					//ストリートビュー未対応エリアの場合
 					if (status != google.maps.StreetViewStatus.OK) {
@@ -350,9 +345,10 @@ function setClickEvent(){
 								position : latlng
 							});
 					}
+					//選択したPlacemarkの場所にズームする
 					var newHeading = Cesium.Math.toRadians(0);
-					var newPitch = Cesium.Math.toRadians(-85);
-					var newRange = 500;
+					var newPitch = Cesium.Math.toRadians(-45);
+					var newRange = 1000;
 
 					var center = position;
 					var boundingSphere = new Cesium.BoundingSphere(center, 1000);

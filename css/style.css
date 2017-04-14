@@ -80,7 +80,7 @@ button.cesium-infoBox-close {
 	position:absolute;
 	height:100%;
 }
-#button {
+#buttonViewPoint {
 	position:absolute;
 	top:8px;
 	left:8px;
@@ -98,13 +98,6 @@ button.cesium-infoBox-close {
 	right:54px;
 	z-index:10005;
 }
-#button4 {
-	position:absolute;
-	top:8px;
-	left:50%;
-	margin-left:-20px;
-	z-index:10100;
-}
 #buttonGeo {
 	position:absolute;
 	bottom:8px;
@@ -115,7 +108,7 @@ button.cesium-infoBox-close {
 
 /*スライドメニュー群*/
 
-#slide_menu{
+#slideMenuViewPoint{
     position: fixed;
     top: 48px;
     left: -200px;
@@ -131,7 +124,7 @@ button.cesium-infoBox-close {
     border-radius: 3px;
 }
 
-#slide_menu2{
+#slideMenuLayer{
     position: fixed;
     top: 48px;
     right: -200px;
