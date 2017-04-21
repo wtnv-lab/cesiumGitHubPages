@@ -100,6 +100,9 @@
 		}
 
 		var viewPointsArray = [];
+
+		//視点を登録：　緯度，経度，注視点の高さ，傾き，視点の高さ
+
 		viewPointsArray[0] = new viewPoints("首都大", 35.661, 139.3657347, 0, -45, 1000);
 		viewPointsArray[1] = new viewPoints("日野市", 35.654, 139.394, 0, -89, 15000);
 		viewPointsArray[2] = new viewPoints("初期視点", 35.654, 139.394, 0, -35, 5000);
@@ -124,6 +127,7 @@
 		}
 
 		var kmlDataArray = [];
+		//KMLデータを登録．kmzでもOK
 		kmlDataArray[0] = new kmlData("避難所", 'data/kml/hinanjo.kml');
 		kmlDataArray[1] = new kmlData("避難場所", 'data/kml/hinanbasyo.kml');
 
@@ -183,13 +187,17 @@
 		setTimeout('groundZero()', 1000);
 
 		function groundZero() {
+			//視点を移動：視点番号，デュレーション
 			changeViewPoint(1, 3);
+			//オーバレイを追加
 			openStreetMapLayer();
 			setTimeout('landing()', 4000);
 		}
 
 		function landing() {
+			//視点を移動：視点番号，デュレーション
 			changeViewPoint(2, 3);
+			//ローディングGIFを表示
 			setTimeout('fadeInOut(blackOutDiv,1)', 3000);
 			setTimeout('loadKml()', 3000);
 		}
@@ -222,7 +230,9 @@
 				i++;
 				if (i == kmlDataArray.length) {
 					clearInterval(load);
+					//クリック時にストビューを表示する処理
 					setClickEvent();
+					//ローディングGIFを非表示に
 					setTimeout('fadeInOut(blackOutDiv,0)', 1000);
 				}
 			}, 200);
