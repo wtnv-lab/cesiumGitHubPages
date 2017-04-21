@@ -21,9 +21,9 @@ Cesiumを使った日野市オープンデータを元にしたKMLファイル�
 
 サンプルのKMLファイルと自分の作成したKMLファイルを入れ替えて、下記のカスタマイズを行うだけで表示できます。
 
-+   `index.html 106行目` :
++   `index.html 104行目` :
     視点配列を作成します。label, lat, lng, heading, pitch, rangeを指定可能です。画面左上のプルダウンメニューに表示されます。260行目のchangeViewPoint関数で処理されます。
-+   `index.html 130行目` :
++   `index.html 122行目` :
     KML配列を作成します。labelとurlを指定可能です。data/kmlに格納したkmlファイルについて指定してください。
 +   `Cesium/Widgets/InfoBox/InfoBoxDescription.css` :
     KMLの<description>タグ内のスタイルはこのCSSで指定してください。
