@@ -64,6 +64,8 @@
 		<a href="https://www.openstreetmap.org/copyright" target="_blank">MapData: © OpenStreetMap contributors</a>
 	</div>
 	<script>
+		// ========== 初期化 ========== 
+
 		//スマホで閲覧した際に，スワイプによるスクロールを禁止
 
 		var cesiumDiv = document.getElementById("cesiumContainer");
@@ -84,9 +86,50 @@
 
 		//ストリートビューのエラーメッセージDIVを隠す
 
-		$(function() {
+		$(function () {
 			$(svNotAvailable).hide();
 		});
+
+		// ========== ビューア初期化 ========== 
+
+		var viewer = new Cesium.Viewer('cesiumContainer', {
+			imageryProvider: new Cesium.ArcGisMapServerImageryProvider({
+				url: '//server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer',
+				enablePickFeatures: false
+			}),
+			navigationHelpButton: false,
+			navigationInstructionsInitiallyVisible: false,
+			geocoder: false,
+			timeline: false,
+			animation: false,
+			sceneModePicker: false,
+			baseLayerPicker: false,
+			scene3DOnly: true,
+			//地形を強調する際は値を変更
+			terrainExaggeration: 1.0
+		});
+
+		//ダブルクリック操作を付加
+
+		viewer.screenSpaceEventHandler.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_DOUBLE_CLICK);
+
+		//地形メッシュを設定
+
+		var cesiumTerrainProviderMeshes = new Cesium.CesiumTerrainProvider({
+			url: '//assets.agi.com/stk-terrain/world',
+			//海を表示しないときは以下をfalseに
+			requestWaterMask: true,
+			requestVertexNormals: true
+		});
+		viewer.terrainProvider = cesiumTerrainProviderMeshes;
+
+		//フォグとLODを設定
+
+		var fog = new Cesium.Fog();
+		fog.density = 0.0005;
+		fog.screenSpaceErrorFactor = 100.0;
+
+		// ========== 視点関連 ========== 
 
 		//視点配列を作成
 
@@ -119,67 +162,43 @@
 		var viewPointChangeMenuHtml = '<ul class="viewpoint">' + dropDownList + '</ul>';
 		viewPointChangeMenu.innerHTML = viewPointChangeMenuHtml;
 
-		//KML配列を作成
+		//視点を変更
 
-		function kmlData(_label, _url) {
-			this.label = _label;
-			this.url = _url;
+		function changeViewPoint(num, delay) {
+			var newLat = viewPointsArray[num].lat;
+			var newLng = viewPointsArray[num].lng;
+			var newHeading = Cesium.Math.toRadians(viewPointsArray[num].heading);
+			var newPitch = Cesium.Math.toRadians(viewPointsArray[num].pitch);
+			var newRange = viewPointsArray[num].range;
+
+			var center = Cesium.Cartesian3.fromDegrees(newLng, newLat);
+			var boundingSphere = new Cesium.BoundingSphere(center, newRange);
+			var headingPitchRange = new Cesium.HeadingPitchRange(newHeading, newPitch, newRange);
+
+			viewer.camera.flyToBoundingSphere(boundingSphere, {
+				duration: delay,
+				offset: headingPitchRange,
+				easingFunction: Cesium.EasingFunction.CUBIC_IN_OUT
+			});
 		}
 
-		var kmlDataArray = [];
-		//KMLデータを登録．kmzでもOK
-		kmlDataArray[0] = new kmlData("避難所", 'data/kml/hinanjo.kml');
-		kmlDataArray[1] = new kmlData("避難場所", 'data/kml/hinanbasyo.kml');
+		//現在地へ移動
 
-		//オーバレイ配列を用意
+		function flyToMyLocation() {
+			function fly(position) {
+				viewer.camera.flyTo({
+					destination: Cesium.Cartesian3.fromDegrees(position.coords.longitude, position.coords.latitude, 750.0),
+					easingFunction: Cesium.EasingFunction.CUBIC_IN_OUT
+				});
+			}
+			navigator.geolocation.getCurrentPosition(fly);
+		}
 
-		var overlayDataArray = [];
-		var openStreetMap = [];
-
-		//ビューアを初期化
-
-		var viewer = new Cesium.Viewer('cesiumContainer', {
-			imageryProvider: new Cesium.ArcGisMapServerImageryProvider({
-				url: '//server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer',
-				enablePickFeatures: false
-			}),
-			navigationHelpButton: false,
-			navigationInstructionsInitiallyVisible: false,
-			geocoder: false,
-			timeline: false,
-			animation: false,
-			sceneModePicker: false,
-			baseLayerPicker: false,
-			scene3DOnly: true,
-			//地形を強調する際は値を変更
-			terrainExaggeration: 1.0
-		});
-
-		//ダブルクリック操作付加
-
-		viewer.screenSpaceEventHandler.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_DOUBLE_CLICK);
-
-		//地形メッシュを設定
-
-		var cesiumTerrainProviderMeshes = new Cesium.CesiumTerrainProvider({
-			url: '//assets.agi.com/stk-terrain/world',
-			//海を表示しないときは以下をfalseに
-			requestWaterMask: true,
-			requestVertexNormals: true
-		});
-		viewer.terrainProvider = cesiumTerrainProviderMeshes;
-
-		//フォグとLODを設定する
-
-		var fog = new Cesium.Fog();
-		fog.density = 0.0005;
-		fog.screenSpaceErrorFactor = 100.0;
-
-		//以降，起動シークエンス
+		// ========== 以降，起動シークエンス ========== 
 
 		//クレジットを隠す
 
-		$(function() {
+		$(function () {
 			$('.cesium-widget-credits').css('display', 'none');
 		});
 
@@ -202,21 +221,33 @@
 			setTimeout('loadKml()', 3000);
 		}
 
-		//KMLをロード
+		// ========== KMLをロード ========== 
+
+		//KML配列を作成
+
+		function kmlData(_label, _url) {
+			this.label = _label;
+			this.url = _url;
+		}
+
+		var kmlDataArray = [];
+		//KMLデータを登録．kmzでもOK
+		kmlDataArray[0] = new kmlData("避難所", 'data/kml/hinanjo.kml');
+		kmlDataArray[1] = new kmlData("避難場所", 'data/kml/hinanbasyo.kml');
 
 		function loadKml() {
 			var i = 0;
-			var load = setInterval(function() {
+			var load = setInterval(function () {
 				var kmlDataSource = new Cesium.KmlDataSource();
 				var promise = kmlDataSource.load(kmlDataArray[i].url);
-				promise.then(function(dataSource) {
+				promise.then(function (dataSource) {
 					viewer.dataSources.add(dataSource);
 
 					//ビルボードの高さを地形に合わせる
 					billboardsIdsLength = (kmlDataSource.entities.values).length;
 					var i = 0;
 					while (i < billboardsIdsLength) {
-						var entity = kmlDataSource.entities.values[i];						
+						var entity = kmlDataSource.entities.values[i];
 						if (entity.billboard != null) {
 							//CLAMP_TO_GROUND,NONE,RELATIVE_TO_GROUNDのいずれかを選択
 							entity.billboard.heightReference = Cesium.HeightReference.RELATIVE_TO_GROUND;
@@ -224,7 +255,7 @@
 						i++;
 					}
 
-				}).otherwise(function(error) {
+				}).otherwise(function (error) {
 					alert('KMLデータが読み込めません');
 				});
 				i++;
@@ -238,7 +269,12 @@
 			}, 200);
 		}
 
-		//地図オーバレイを作成
+		// ========== 地図オーバレイを作成 ========== 
+
+		// オーバレイ配列
+
+		var overlayDataArray = [];
+		var openStreetMap = [];
 
 		var layers = viewer.scene.imageryLayers;
 
@@ -275,7 +311,7 @@
 			overlayListMenu.innerHTML = overlayList;
 		}
 
-		//OSMの透明度を変更
+		//オーバレイの透明度を変更 
 
 		function transParent(layer) {
 			var id = overlayDataArray[layer].id;
@@ -295,10 +331,10 @@
 			var geocoder = new google.maps.Geocoder();
 			var input = document.getElementById('inputtext').value;
 			geocoder.geocode({
-					address: input
-				},
+				address: input
+			},
 
-				function(results, status) {
+				function (results, status) {
 					if (status == google.maps.GeocoderStatus.OK) {
 						var viewportObj = results[0].geometry.viewport;
 						var southNorth = viewportObj[Object.keys(viewportObj)[0]];
@@ -319,7 +355,7 @@
 			);
 		}
 
-		//ダブルクリックでストビューを表示
+		// ========== ダブルクリックでストビューを表示 ========== 
 
 		//移動前のカメラ位置格納オブジェクト
 
@@ -328,7 +364,7 @@
 
 		function setClickEvent() {
 			var handler = new Cesium.ScreenSpaceEventHandler(viewer.scene.canvas);
-			handler.setInputAction(function(click) {
+			handler.setInputAction(function (click) {
 				var pickedObject = viewer.scene.pick(click.position);
 				if (Cesium.defined(pickedObject) && (pickedObject != "")) {
 					var position = pickedObject.primitive._position;
@@ -341,7 +377,7 @@
 					var cart = Cesium.Ellipsoid.WGS84.cartesianToCartographic(position);
 					var latlng = new google.maps.LatLng(Cesium.Math.toDegrees(cart.latitude), Cesium.Math.toDegrees(cart.longitude));
 					var sv = new google.maps.StreetViewService();
-					sv.getPanoramaByLocation(latlng, 100, function(data, status) {
+					sv.getPanoramaByLocation(latlng, 100, function (data, status) {
 
 						//ストリートビュー未対応エリアの場合エラーメッセージを表示
 
@@ -378,53 +414,21 @@
 			}, Cesium.ScreenSpaceEventType.LEFT_DOUBLE_CLICK);
 		}
 
-		//視点を移動
-
-		function changeViewPoint(num, delay) {
-			var newLat = viewPointsArray[num].lat;
-			var newLng = viewPointsArray[num].lng;
-			var newHeading = Cesium.Math.toRadians(viewPointsArray[num].heading);
-			var newPitch = Cesium.Math.toRadians(viewPointsArray[num].pitch);
-			var newRange = viewPointsArray[num].range;
-
-			var center = Cesium.Cartesian3.fromDegrees(newLng, newLat);
-			var boundingSphere = new Cesium.BoundingSphere(center, newRange);
-			var headingPitchRange = new Cesium.HeadingPitchRange(newHeading, newPitch, newRange);
-
-			viewer.camera.flyToBoundingSphere(boundingSphere, {
-				duration: delay,
-				offset: headingPitchRange,
-				easingFunction: Cesium.EasingFunction.CUBIC_IN_OUT
-			});
-		}
-
-		//現在地へ移動
-
-		function flyToMyLocation() {
-			function fly(position) {
-				viewer.camera.flyTo({
-					destination: Cesium.Cartesian3.fromDegrees(position.coords.longitude, position.coords.latitude, 750.0),
-					easingFunction: Cesium.EasingFunction.CUBIC_IN_OUT
-				});
-			}
-			navigator.geolocation.getCurrentPosition(fly);
-		}
-
-		//ヘルプ
+		// ========== ヘルプへリンク ========== 
 
 		function help() {
 			window.open('https://github.com/wtnv-lab/cesiumGitHubPages');
 		}
 
-		//DIVのフェードイン・アウト
+		// ========== 各種DIVのフェードイン・アウト ========== 
 
 		function fadeInOut(layer, param) {
 			if (param == 0) {
-				$(function() {
+				$(function () {
 					$(layer).fadeOut("slow");
 				});
 
-				//ストリートビューをOFFにした際に元の視点に戻る
+				//ストリートビューDIVをフェードアウトした際には元の視点に復帰
 
 				if (layer == streetView_wrapper) {
 					viewer.camera.flyTo({
@@ -438,10 +442,10 @@
 						}
 					});
 				}
-
+				//オブジェクト選択と視点拘束を解除
 				viewer.trackedEntity = undefined;
 			} else {
-				$(function() {
+				$(function () {
 					$(layer).fadeIn("slow");
 				});
 			}
