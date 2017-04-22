@@ -213,13 +213,13 @@
 					viewer.dataSources.add(dataSource);
 
 					//ビルボードの高さを地形に合わせる
-
 					billboardsIdsLength = (kmlDataSource.entities.values).length;
 					var i = 0;
-					while (i <= billboardsIdsLength) {
-						var entity = kmlDataSource.entities.values[i];
-						if (entity) {
-							kmlDataSource.entities.values[i].billboard.heightReference = Cesium.HeightReference.CLAMP_TO_GROUND;
+					while (i < billboardsIdsLength) {
+						var entity = kmlDataSource.entities.values[i];						
+						if (entity.billboard != null) {
+							//CLAMP_TO_GROUND,NONE,RELATIVE_TO_GROUNDのいずれかを選択
+							entity.billboard.heightReference = Cesium.HeightReference.RELATIVE_TO_GROUND;
 						}
 						i++;
 					}
