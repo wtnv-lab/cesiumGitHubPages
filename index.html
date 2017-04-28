@@ -100,6 +100,7 @@
 			navigationHelpButton: false,
 			navigationInstructionsInitiallyVisible: false,
 			geocoder: false,
+			//時間を使うときは以下の二行をコメントアウト
 			timeline: false,
 			animation: false,
 			sceneModePicker: false,
@@ -234,6 +235,8 @@
 		//KMLデータを登録．kmzでもOK
 		kmlDataArray[0] = new kmlData("避難所", 'data/kml/hinanjo.kml');
 		kmlDataArray[1] = new kmlData("避難場所", 'data/kml/hinanbasyo.kml');
+		//時間情報入りのKML
+		//kmlDataArray[2] = new kmlData("タイムスパン", 'data/kml/timeSpans.kml');
 
 		function loadKml() {
 			var i = 0;
