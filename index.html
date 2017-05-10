@@ -380,6 +380,7 @@
 					var cart = Cesium.Ellipsoid.WGS84.cartesianToCartographic(position);
 					var latlng = new google.maps.LatLng(Cesium.Math.toDegrees(cart.latitude), Cesium.Math.toDegrees(cart.longitude));
 					var sv = new google.maps.StreetViewService();
+					var svp = void 0;
 					sv.getPanoramaByLocation(latlng, 100, function (data, status) {
 
 						//ストリートビュー未対応エリアの場合エラーメッセージを表示
@@ -391,10 +392,14 @@
 						} else {
 							streetViewWrapper.style.display = "block";
 							fadeInOut(streetViewWrapper, 1);
-							var svp = new google.maps.StreetViewPanorama(
-								document.getElementById("streetView"), {
-									position: latlng
-								});
+							if (svp === void 0) {
+								svp = new google.maps.StreetViewPanorama(
+									document.getElementById("streetView"), {
+										position: latlng
+									});
+							} else {
+								svp.setPano(data.location.pano);
+							}
 						}
 
 						//選択したPlacemarkの場所にズーム
