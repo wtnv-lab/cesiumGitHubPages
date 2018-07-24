@@ -116,13 +116,12 @@
 
 		//地形メッシュを設定
 
-		var cesiumTerrainProviderMeshes = new Cesium.CesiumTerrainProvider({
-			url: '//assets.agi.com/stk-terrain/world',
-			//海を表示しないときは以下をfalseに
-			requestWaterMask: true,
-			requestVertexNormals: true
+		var terrainProvider = new Cesium.createWorldTerrain({
+			requestWaterMask: false,
+			requestVertexNormals: false,
+			heightmapTerrainQuality: 0.5
 		});
-		viewer.terrainProvider = cesiumTerrainProviderMeshes;
+		viewer.terrainProvider = terrainProvider;
 
 		//フォグとLODを設定
 
